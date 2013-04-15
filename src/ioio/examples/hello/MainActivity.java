@@ -3,7 +3,6 @@ package ioio.examples.hello;
 import ioio.lib.api.DigitalOutput;
 import ioio.lib.api.PwmOutput;
 import ioio.lib.api.exception.ConnectionLostException;
-import ioio.lib.util.AbstractIOIOActivity;
 import ioio.lib.util.BaseIOIOLooper;
 import ioio.lib.util.IOIOLooper;
 import ioio.lib.util.android.IOIOActivity;
@@ -25,7 +24,7 @@ import android.widget.ToggleButton;
  * HelloIOIOPower example.
  */
 @SuppressWarnings("deprecation")
-public class MainActivity extends AbstractIOIOActivity implements OnSeekBarChangeListener{
+public class MainActivity extends IOIOActivity implements OnSeekBarChangeListener{
 	private ToggleButton button_;
 	private final int LED1_PIN = 1;
 	private final int LED2_PIN = 2;
@@ -103,7 +102,7 @@ public class MainActivity extends AbstractIOIOActivity implements OnSeekBarChang
 	 * been established (which might happen several times!). Then, loop() will
 	 * be called repetitively until the IOIO gets disconnected.
 	 */
-	class IOIOThread extends AbstractIOIOActivity.IOIOThread {
+	class Looper extends BaseIOIOLooper {
 		/** The on-board LED. */
 		private DigitalOutput led_;
 		private DigitalOutput power;
@@ -121,10 +120,10 @@ public class MainActivity extends AbstractIOIOActivity implements OnSeekBarChang
 		 */
 		@Override
 		protected void setup() throws ConnectionLostException {
-			led_ = ioio_.openDigitalOutput(0, true);
-			power = ioio_.openDigitalOutput(LED1_PIN, false);
-			power2 = ioio_.openDigitalOutput(LED2_PIN, false);
 			try{
+				led_ = ioio_.openDigitalOutput(0, true);
+				power = ioio_.openDigitalOutput(LED1_PIN, false);
+				power2 = ioio_.openDigitalOutput(LED2_PIN, false);
 				Heater = ioio_.openPwmOutput(Heat_Pin, PWM_FREQ);
 				enableUi(true);
 			}catch(ConnectionLostException e){
@@ -143,21 +142,15 @@ public class MainActivity extends AbstractIOIOActivity implements OnSeekBarChang
 		 */
 		@Override
 		public void loop() throws ConnectionLostException {
-			led_.write(!button_.isChecked());
-			power.write(mLed1State);
-			power2.write(mLed2State);
 			try {
+				led_.write(!button_.isChecked());
+				power.write(mLed1State);
+				power2.write(mLed2State);
+				Heater.setPulseWidth(HeatState);
 				Thread.sleep(100);
 			} catch (InterruptedException e) {
-			}
-			try {
-				Heater.setPulseWidth(HeatState);
-				sleep(10);
-			} catch (InterruptedException e) {
-				ioio_.disconnect();
-			} catch (ConnectionLostException e) {
 				enableUi(false);
-				throw e;
+				e.printStackTrace(); 
 			}
 		}
 	}
@@ -168,9 +161,9 @@ public class MainActivity extends AbstractIOIOActivity implements OnSeekBarChang
 	 * @see ioio.lib.util.AbstractIOIOActivity#createIOIOThread()
 	 */
 	@Override
-	protected AbstractIOIOActivity.IOIOThread createIOIOThread() {
-		return new IOIOThread();
-	}
+	protected IOIOLooper createIOIOLooper() {
+        return new Looper();
+    }
 	
 	private void enableUi(final boolean enable){
 		runOnUiThread(new Runnable(){
