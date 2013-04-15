@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/LED"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/LED" />
+
+    <ToggleButton
+        android:id="@+id/button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="ToggleButton" >
+    </ToggleButton>
+
+    <TextView
+        android:id="@+id/but1"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/but1" />
+
+    <ToggleButton
+        android:id="@+id/btn1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TogglePower" >
+    </ToggleButton>
+
+    <TextView
+        android:id="@+id/but2"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/but2" />
+
+    <ToggleButton
+        android:id="@+id/btn2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TogglePower" >
+    </ToggleButton>
+
+</LinearLayout>

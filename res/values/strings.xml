@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="LED">LED light</string>
+    <string name="but1">Toggle</string>
+    <string name="but2">On wait Off</string>
+    <string name="app_name">Hello IOIO</string>
+</resources>
