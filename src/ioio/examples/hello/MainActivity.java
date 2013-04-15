@@ -1,6 +1,7 @@
 package ioio.examples.hello;
 
 import ioio.lib.api.DigitalOutput;
+import ioio.lib.api.PwmOutput;
 import ioio.lib.api.exception.ConnectionLostException;
 import ioio.lib.util.AbstractIOIOActivity;
 import ioio.lib.util.BaseIOIOLooper;
@@ -11,6 +12,8 @@ import android.os.Handler;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.SeekBar;
+import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.ToggleButton;
 
 /**
@@ -22,10 +25,17 @@ import android.widget.ToggleButton;
  * HelloIOIOPower example.
  */
 @SuppressWarnings("deprecation")
-public class MainActivity extends AbstractIOIOActivity{
+public class MainActivity extends AbstractIOIOActivity implements OnSeekBarChangeListener{
 	private ToggleButton button_;
 	private final int LED1_PIN = 1;
 	private final int LED2_PIN = 2;
+	
+	private final int Heat_Pin = 34;
+	private final int PWM_FREQ = 10000;
+	private final int Polling_Delay = 150;
+	private SeekBar Seekbar;
+	private int HeatState;
+	private long LastChange;
 
 	private Button mLed1Button, mLed2Button;
 	
@@ -78,6 +88,12 @@ public class MainActivity extends AbstractIOIOActivity{
 				}, 2000);
 			}
 		});
+		
+		Seekbar = (SeekBar) findViewById(R.id.SeekBar);
+		Seekbar.setOnSeekBarChangeListener(this);
+		Seekbar.setProgress(HeatState);
+		
+		enableUi(false);
 	}
 
 	/**
@@ -92,6 +108,7 @@ public class MainActivity extends AbstractIOIOActivity{
 		private DigitalOutput led_;
 		private DigitalOutput power;
 		private DigitalOutput power2;
+		private PwmOutput Heater;
 
 		/**
 		 * Called every time a connection with IOIO has been established.
@@ -107,6 +124,13 @@ public class MainActivity extends AbstractIOIOActivity{
 			led_ = ioio_.openDigitalOutput(0, true);
 			power = ioio_.openDigitalOutput(LED1_PIN, false);
 			power2 = ioio_.openDigitalOutput(LED2_PIN, false);
+			try{
+				Heater = ioio_.openPwmOutput(Heat_Pin, PWM_FREQ);
+				enableUi(true);
+			}catch(ConnectionLostException e){
+				enableUi(false);
+				throw e;
+			}
 		}
 
 		/**
@@ -126,6 +150,15 @@ public class MainActivity extends AbstractIOIOActivity{
 				Thread.sleep(100);
 			} catch (InterruptedException e) {
 			}
+			try {
+				Heater.setPulseWidth(HeatState);
+				sleep(10);
+			} catch (InterruptedException e) {
+				ioio_.disconnect();
+			} catch (ConnectionLostException e) {
+				enableUi(false);
+				throw e;
+			}
 		}
 	}
 
@@ -137,5 +170,36 @@ public class MainActivity extends AbstractIOIOActivity{
 	@Override
 	protected AbstractIOIOActivity.IOIOThread createIOIOThread() {
 		return new IOIOThread();
+	}
+	
+	private void enableUi(final boolean enable){
+		runOnUiThread(new Runnable(){
+			@Override
+			public void run(){
+				Seekbar.setEnabled(enable);
+			}
+		});
+	}
+	
+	@Override
+	public void onProgressChanged(SeekBar seedBar, int progress, boolean fromUser){
+		if(System.currentTimeMillis() - LastChange > Polling_Delay){
+			updateState(Seekbar);
+			LastChange = System.currentTimeMillis();
+		}
+	}
+	
+	@Override
+	public void onStartTrackingTouch(SeekBar seekbar){
+		LastChange = System.currentTimeMillis();
+	}
+	
+	@Override
+	public void onStopTrackingTouch(SeekBar seekbar){
+		updateState(seekbar);
+	}
+	
+	private void updateState(final SeekBar seekbar){
+		HeatState = seekbar.getProgress();
 	}
 }

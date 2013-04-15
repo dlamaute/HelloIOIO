@@ -1,7 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="LED">LED light</string>
-    <string name="but1">Toggle</string>
-    <string name="but2">On wait Off</string>
+    <string name="LED_text">LED light</string>
+    <string name="but1_text">Toggle</string>
+    <string name="but2_text">On wait Off</string>
     <string name="app_name">Hello IOIO</string>
+    <string name="seek_text">Heat Pad</string>
+    
+    
+    <string name="LED_but">apagado</string>
+    <string name="but1_but">apagado</string>
+    <string name="but2_but">pausa</string>
+    <string name="seek_but">Calor</string>
 </resources>

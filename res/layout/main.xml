@@ -8,39 +8,51 @@
         android:id="@+id/LED"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="@string/LED" />
+        android:text="@string/LED_text" />
 
     <ToggleButton
         android:id="@+id/button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="ToggleButton" >
+        android:text="@string/LED_but" >
     </ToggleButton>
 
     <TextView
         android:id="@+id/but1"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="@string/but1" />
+        android:text="@string/but1_text" />
 
     <ToggleButton
         android:id="@+id/btn1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="TogglePower" >
+        android:text="@string/but1_but" >
     </ToggleButton>
 
     <TextView
         android:id="@+id/but2"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="@string/but2" />
+        android:text="@string/but2_text" />
 
     <ToggleButton
         android:id="@+id/btn2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="TogglePower" >
+        android:text="@string/but1_but" >
     </ToggleButton>
+
+    <TextView
+        android:id="@+id/seek"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/seek_text" />
+    
+    <SeekBar
+        android:id="@+id/SeekBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/seek_but" />
 
 </LinearLayout>
