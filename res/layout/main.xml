@@ -5,54 +5,76 @@
     android:orientation="vertical" >
 
     <TextView
-        android:id="@+id/LED"
+        android:id="@+id/LED_Txt"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="@string/LED_text" />
+        android:text="@string/LED_Txt" />
 
     <ToggleButton
-        android:id="@+id/button"
+        android:id="@+id/LED_Btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/LED_but" >
+        android:text="@string/LED_Btn"
+        android:textOff="LED Off"
+        android:textOn="LED On" >
+
     </ToggleButton>
 
     <TextView
-        android:id="@+id/but1"
+        android:id="@+id/Lamp_Txt"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="@string/but1_text" />
+        android:text="@string/Lamp_Txt" />
 
     <ToggleButton
-        android:id="@+id/btn1"
+        android:id="@+id/Lamp_Btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/but1_but" >
+        android:text="@string/Lamp_Btn" 
+        android:textOff="Lamp Off"
+        android:textOn="Lamp On" >
     </ToggleButton>
 
     <TextView
-        android:id="@+id/but2"
+        android:id="@+id/Smell_Txt"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="@string/but2_text" />
+        android:text="@string/Smell_Txt" />
 
     <ToggleButton
-        android:id="@+id/btn2"
+        android:id="@+id/Smell_Btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/but1_but" >
+        android:text="@string/Smell_Btn" 
+        android:textOff="Smell Off"
+        android:textOn="Smell On" >
     </ToggleButton>
 
     <TextView
-        android:id="@+id/seek"
+        android:id="@+id/Heat_Txt"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="@string/seek_text" />
+        android:text="@string/Heat_Txt" />
     
     <SeekBar
-        android:id="@+id/SeekBar"
+        android:id="@+id/Heat_Bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/seek_but" />
+        android:text="@string/Heat_Bar" />
+    
+    <TextView
+        android:id="@+id/Analog_Txt"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/Analog_Txt" />
+    
+    <SeekBar
+        android:id="@+id/Analog_Bar"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:max="100"
+        android:progress="0"
+        android:text="@string/Analog_Bar" />
+        
 
 </LinearLayout>
