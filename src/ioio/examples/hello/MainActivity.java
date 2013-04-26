@@ -28,7 +28,7 @@ import android.widget.ToggleButton;
 public class MainActivity extends IOIOActivity implements OnClickListener, OnSeekBarChangeListener{
 	private final int LED_PIN = 0;
 	private ToggleButton LED_Btn;
-	private boolean LED_State = false;
+	private boolean LED_State = true;
 	
 	private final int Lamp_PIN = 1;
 	private ToggleButton Lamp_Btn;
@@ -45,7 +45,7 @@ public class MainActivity extends IOIOActivity implements OnClickListener, OnSee
 	
 	private final int Analog_PIN = 40;
 	private SeekBar Analog_Bar;
-	//private TextView Analog_Txt;
+	private final int Analog_LED_PIN = 4;
 	
 	private final int Polling_Delay = 150;
 	private long LastChange;
@@ -74,7 +74,6 @@ public class MainActivity extends IOIOActivity implements OnClickListener, OnSee
 		Heat_Bar.setProgress(Heat_State);
 		
 		Analog_Bar = (SeekBar) findViewById(R.id.Analog_Bar);
-		//Analog_Txt = (TextView) findViewById(R.id.Analog_Txt);
 		
 		
 		enableUi(false);
@@ -92,6 +91,7 @@ public class MainActivity extends IOIOActivity implements OnClickListener, OnSee
 		private DigitalOutput LED;
 		private DigitalOutput Lamp;
 		private DigitalOutput Smell;
+		private DigitalOutput Analog_LED;
 		private PwmOutput Heater;
 		private AnalogInput mAnalog;
 
@@ -112,6 +112,7 @@ public class MainActivity extends IOIOActivity implements OnClickListener, OnSee
 				Smell = ioio_.openDigitalOutput(Smell_PIN, false);
 				Heater = ioio_.openPwmOutput(Heat_PIN, Heat_FREQ);
 				mAnalog = ioio_.openAnalogInput(Analog_PIN);
+				Analog_LED = ioio_.openDigitalOutput(Analog_LED_PIN);
 				enableUi(true);
 			}catch(ConnectionLostException e){
 				enableUi(false);
@@ -135,13 +136,13 @@ public class MainActivity extends IOIOActivity implements OnClickListener, OnSee
 				Smell.write(Smell_State);
 				Heater.setPulseWidth(Heat_State);
 				
-				final float reading = mAnalog.read();
-				Analog_Bar.setProgress((int)(reading*100));
-				System.out.println("Heat Input "+ reading *100);
-				if (reading * 100 < 1){
-					LED.write(false);
+				final float Analog_Reading = mAnalog.read();
+				Analog_Bar.setProgress((int)(Analog_Reading*1000));
+				System.out.println("Heat Input "+ Analog_Reading *1000);
+				if (Analog_Reading * 1000 > 10){
+					Analog_LED.write(true);
 				}else {
-					LED.write(true);
+					Analog_LED.write(false);
 				}
 				//Analog_Txt.setText(Float.toString((reading * 100)));
 				Thread.sleep(100);
@@ -199,7 +200,8 @@ public class MainActivity extends IOIOActivity implements OnClickListener, OnSee
 			   @Override
 			   public void run() {
 				   // on launch of activity we execute an async task 
-				   Smell_State = false;			
+				   Smell_State = false;
+				   Smell_Btn.setChecked(false);
 			   }
 			}, 500);
 			break;
