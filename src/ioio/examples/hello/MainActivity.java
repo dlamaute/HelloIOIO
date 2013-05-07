@@ -2,6 +2,7 @@ package ioio.examples.hello;
 
 import ioio.lib.api.AnalogInput;
 import ioio.lib.api.DigitalOutput;
+import ioio.lib.api.DigitalOutput.Spec.Mode;
 import ioio.lib.api.PwmOutput;
 import ioio.lib.api.exception.ConnectionLostException;
 import ioio.lib.util.BaseIOIOLooper;
@@ -37,7 +38,10 @@ public class MainActivity extends IOIOActivity implements OnClickListener, OnSee
 	private final int Heat_PIN = 2;
 	private SeekBar Heat_Bar;
 	private int Heat_State;
-	private final int Heat_FREQ = 10000;
+	private final int Heat_FREQ = 100;
+	private TextView PWM;
+	float pulse;
+	private Handler pulseHandler; 
 	
 	private final int Smell_PIN = 3;
 	private ToggleButton Smell_Btn;
@@ -72,6 +76,9 @@ public class MainActivity extends IOIOActivity implements OnClickListener, OnSee
 		Heat_Bar = (SeekBar) findViewById(R.id.Heat_Bar);
 		Heat_Bar.setOnSeekBarChangeListener(this);
 		Heat_Bar.setProgress(Heat_State);
+		PWM = (TextView) findViewById(R.id.PWM_Txt);
+		pulseHandler = new Handler();
+		
 		
 		Analog_Bar = (SeekBar) findViewById(R.id.Analog_Bar);
 		
@@ -110,7 +117,7 @@ public class MainActivity extends IOIOActivity implements OnClickListener, OnSee
 				LED = ioio_.openDigitalOutput(LED_PIN, true);
 				Lamp = ioio_.openDigitalOutput(Lamp_PIN, false);
 				Smell = ioio_.openDigitalOutput(Smell_PIN, false);
-				Heater = ioio_.openPwmOutput(Heat_PIN, Heat_FREQ);
+				Heater = ioio_.openPwmOutput(new DigitalOutput.Spec(Heat_PIN, Mode.OPEN_DRAIN), Heat_FREQ);
 				mAnalog = ioio_.openAnalogInput(Analog_PIN);
 				Analog_LED = ioio_.openDigitalOutput(Analog_LED_PIN);
 				enableUi(true);
@@ -119,7 +126,7 @@ public class MainActivity extends IOIOActivity implements OnClickListener, OnSee
 				throw e;
 			}
 		}
-
+		
 		/**
 		 * Called repetitively while the IOIO is connected.
 		 * 
@@ -134,11 +141,15 @@ public class MainActivity extends IOIOActivity implements OnClickListener, OnSee
 				LED.write(LED_State);
 				Lamp.write(Lamp_State);
 				Smell.write(Smell_State);
-				Heater.setPulseWidth(Heat_State);
+				pulse = 600 + Heat_Bar.getProgress() * 20;
+				if(pulse <700) pulse=700;
+				if(pulse > 2400) pulse = 2400;
+				Heater.setPulseWidth(pulse);
+				if(!LED_State)System.out.println (pulse);
 				
 				final float Analog_Reading = mAnalog.read();
 				Analog_Bar.setProgress((int)(Analog_Reading*1000));
-				System.out.println("Heat Input "+ Analog_Reading *1000);
+				if(!LED_State)System.out.println("Heat Input "+ Analog_Reading *1000);
 				if (Analog_Reading * 1000 > 10){
 					Analog_LED.write(true);
 				}else {
@@ -150,6 +161,16 @@ public class MainActivity extends IOIOActivity implements OnClickListener, OnSee
 				enableUi(false);
 				e.printStackTrace(); 
 			}
+			Runnable runnable = new Runnable(){
+				public void run(){
+					pulseHandler.post(new Runnable(){
+						public void run(){
+							PWM.setText("Pulse: " + pulse);
+						}
+					});
+				}
+			};
+			new Thread(runnable).start();
 		}
 	}
 
@@ -203,7 +224,7 @@ public class MainActivity extends IOIOActivity implements OnClickListener, OnSee
 				   Smell_State = false;
 				   Smell_Btn.setChecked(false);
 			   }
-			}, 500);
+			}, 750);
 			break;
 		
 		default:

@@ -14,6 +14,8 @@
     <string name="Heat_Txt">Heat Pad Output</string>
     <string name="Heat_Bar">Calor</string>
     
+    <string name="PWM_Txt">Pulse:</string>
+    
     <string name="Analog_Txt">Heat Pad Input</string>
     <string name="Analog_Bar">Input</string>
 </resources>
