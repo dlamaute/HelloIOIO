@@ -11,11 +11,17 @@
     <string name="Smell_Txt">Smell</string>
     <string name="Smell_Btn">.5 secs</string>
     
-    <string name="Heat_Txt">Heat Pad Output</string>
+    <string name="Heat_Txt">Motor Control</string>
     <string name="Heat_Bar">Calor</string>
     
     <string name="PWM_Txt">Pulse:</string>
     
     <string name="Analog_Txt">Heat Pad Input</string>
+    <string name="Analog_Value">Heat Pad Value: </string>
     <string name="Analog_Bar">Input</string>
+    
+    
+    <string name="Vibrator_Txt">Vibrator</string>
+    <string name="Vibrator_Value">Value: </string>
+    <string name="Vibrator_Bar">Input</string>
 </resources>

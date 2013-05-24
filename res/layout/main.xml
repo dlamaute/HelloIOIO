@@ -50,10 +50,9 @@
         android:textOn="Smell On" >
     </ToggleButton>
 
-    <TableRow
-        android:id="@+id/tableRow1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+   <RelativeLayout
+       android:layout_width="fill_parent"
+       android:layout_height="wrap_content" >
 
         <TextView
             android:id="@+id/Heat_Txt"
@@ -66,33 +65,81 @@
 				    android:id="@+id/PWM_Txt"
 				    android:layout_width="wrap_content"
 				    android:layout_height="wrap_content"
-				    android:layout_gravity="top"
+				    android:layout_alignParentTop="true"
+				    android:layout_toRightOf="@+id/Heat_Txt"
 				    android:text="@string/PWM_Txt" />
 
-    </TableRow>
+				<SeekBar
+				    android:id="@+id/Heat_Bar"
+				    android:layout_width="match_parent"
+				    android:layout_height="wrap_content"
+				    android:layout_below="@id/PWM_Txt"
+				    android:text="@string/Heat_Bar" />
+				
+	</RelativeLayout>
 
+   <RelativeLayout
+       android:layout_width="fill_parent"
+       android:layout_height="wrap_content">
     
-    <SeekBar
-        android:id="@+id/Heat_Bar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/Heat_Bar" />
+	    <TextView
+	        android:id="@+id/Analog_Txt"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_marginRight="30dp"
+	        android:text="@string/Analog_Txt" />
+	    
+	     <TextView
+	         android:id="@+id/Analog_Value"
+	         android:layout_width="fill_parent"
+	         android:layout_height="wrap_content"
+	         android:layout_toRightOf="@id/Analog_Txt"
+	         android:text="@string/Analog_Value" />
+	    
+	    <SeekBar
+	        android:id="@+id/Analog_Bar"
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_below="@id/Analog_Txt"
+	        android:clickable="false"
+	        android:indeterminate="false"
+	        android:longClickable="false"
+	        android:max="100"
+	        android:progress="0"
+	        android:text="@string/Analog_Bar" />
+	  
+	  </RelativeLayout>
+	  
+   <RelativeLayout
+       android:layout_width="fill_parent"
+       android:layout_height="wrap_content">
     
-    <TextView
-        android:id="@+id/Analog_Txt"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/Analog_Txt" />
-    
-    <SeekBar
-        android:id="@+id/Analog_Bar"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:clickable="false"
-        android:indeterminate="false"
-        android:longClickable="false"
-        android:max="100"
-        android:progress="0"
-        android:text="@string/Analog_Bar" />
+	    <TextView
+	        android:id="@+id/Vibrator_Txt"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_marginRight="30dp"
+	        android:text="@string/Vibrator_Txt" />
+	    
+	     <TextView
+	         android:id="@+id/Vibrator_Value"
+	         android:layout_width="fill_parent"
+	         android:layout_height="wrap_content"
+	         android:layout_toRightOf="@id/Vibrator_Txt"
+	         android:text="@string/Vibrator_Value" />
+	    
+	    <SeekBar
+	        android:id="@+id/Vibrator_Bar"
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_below="@id/Vibrator_Txt"
+	        android:clickable="false"
+	        android:indeterminate="false"
+	        android:longClickable="false"
+	        android:max="100"
+	        android:progress="0"
+	        android:text="@string/Vibrator_Bar" />
+	  
+	  </RelativeLayout>
 
 </LinearLayout>

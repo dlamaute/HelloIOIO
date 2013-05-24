@@ -49,7 +49,17 @@ public class MainActivity extends IOIOActivity implements OnClickListener, OnSee
 	
 	private final int Analog_PIN = 40;
 	private SeekBar Analog_Bar;
+	private TextView analog_Value;
 	private final int Analog_LED_PIN = 4;
+	float Analog_Reading = 0;
+	
+	private final int Vibrator_PIN = 5;
+	private SeekBar Vibrator_Bar;
+	private TextView Vibrator_Value;
+	float Vibrator_Reading = 0;
+	float Vibrator_Pulse;
+	private int Vibrator_FREQ=50;
+	private int Vibrator_State;
 	
 	private final int Polling_Delay = 150;
 	private long LastChange;
@@ -79,8 +89,13 @@ public class MainActivity extends IOIOActivity implements OnClickListener, OnSee
 		PWM = (TextView) findViewById(R.id.PWM_Txt);
 		pulseHandler = new Handler();
 		
-		
+		analog_Value = (TextView) findViewById(R.id.Analog_Value);
 		Analog_Bar = (SeekBar) findViewById(R.id.Analog_Bar);
+		
+		Vibrator_Value = (TextView) findViewById(R.id.Vibrator_Value);
+		Vibrator_Bar = (SeekBar) findViewById(R.id.Vibrator_Bar);
+		Vibrator_Bar.setOnSeekBarChangeListener(this);
+		Vibrator_Bar.setProgress(Vibrator_State);
 		
 		
 		enableUi(false);
@@ -99,7 +114,8 @@ public class MainActivity extends IOIOActivity implements OnClickListener, OnSee
 		private DigitalOutput Lamp;
 		private DigitalOutput Smell;
 		private DigitalOutput Analog_LED;
-		private PwmOutput Heater;
+		private PwmOutput Motor;
+		private PwmOutput Vibrator;
 		private AnalogInput mAnalog;
 
 		/**
@@ -117,9 +133,13 @@ public class MainActivity extends IOIOActivity implements OnClickListener, OnSee
 				LED = ioio_.openDigitalOutput(LED_PIN, true);
 				Lamp = ioio_.openDigitalOutput(Lamp_PIN, false);
 				Smell = ioio_.openDigitalOutput(Smell_PIN, false);
-				Heater = ioio_.openPwmOutput(new DigitalOutput.Spec(Heat_PIN, Mode.OPEN_DRAIN), Heat_FREQ);
+				
+				Motor = ioio_.openPwmOutput(new DigitalOutput.Spec(Heat_PIN, Mode.OPEN_DRAIN), Heat_FREQ);
 				mAnalog = ioio_.openAnalogInput(Analog_PIN);
 				Analog_LED = ioio_.openDigitalOutput(Analog_LED_PIN);
+
+				Vibrator = ioio_.openPwmOutput(new DigitalOutput.Spec(Vibrator_PIN, Mode.OPEN_DRAIN), Vibrator_FREQ);
+				
 				enableUi(true);
 			}catch(ConnectionLostException e){
 				enableUi(false);
@@ -141,13 +161,21 @@ public class MainActivity extends IOIOActivity implements OnClickListener, OnSee
 				LED.write(LED_State);
 				Lamp.write(Lamp_State);
 				Smell.write(Smell_State);
+				
 				pulse = 600 + Heat_Bar.getProgress() * 20;
 				if(pulse <700) pulse=700;
 				if(pulse > 2400) pulse = 2400;
-				Heater.setPulseWidth(pulse);
-				if(!LED_State)System.out.println (pulse);
+				Motor.setPulseWidth(pulse);
+				if(!LED_State)System.out.println ("Motor: "+pulse);
 				
-				final float Analog_Reading = mAnalog.read();
+				Vibrator_Pulse =Vibrator_Bar.getProgress()*30;
+				//Vibrator_FREQ =Vibrator_Bar.getProgress()*20;
+				//if(pulse <700) pulse=700;
+				//if(pulse > 2400) pulse = 2400;
+				Vibrator.setPulseWidth(Vibrator_Pulse);
+				if(!LED_State)System.out.println ("Vibrator= "+Vibrator_Pulse);
+				
+				Analog_Reading = mAnalog.read();
 				Analog_Bar.setProgress((int)(Analog_Reading*1000));
 				if(!LED_State)System.out.println("Heat Input "+ Analog_Reading *1000);
 				if (Analog_Reading * 1000 > 10){
@@ -166,6 +194,8 @@ public class MainActivity extends IOIOActivity implements OnClickListener, OnSee
 					pulseHandler.post(new Runnable(){
 						public void run(){
 							PWM.setText("Pulse: " + pulse);
+							analog_Value.setText("Value: "+Analog_Reading*1000);
+							Vibrator_Value.setText("Value: "+Vibrator_Pulse);
 						}
 					});
 				}
@@ -252,5 +282,7 @@ public class MainActivity extends IOIOActivity implements OnClickListener, OnSee
 	
 	private void updateState(final SeekBar seekbar){
 		Heat_State = seekbar.getProgress();
+		Vibrator_State = seekbar.getProgress();
+		//Vibrator_FREQ = seekbar.getProgress();
 	}
 }
