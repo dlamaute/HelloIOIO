@@ -26,6 +26,8 @@ import android.widget.ToggleButton;
  * HelloIOIOPower example.
  */
 
+//testing github
+
 public class MainActivity extends IOIOActivity implements OnClickListener, OnSeekBarChangeListener{
 	private final int LED_PIN = 0;
 	private ToggleButton LED_Btn;

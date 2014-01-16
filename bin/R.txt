@@ -32,3 +32,4 @@ int string Vibrator_Txt 0x7f05000d
 int string Vibrator_Value 0x7f05000e
 int string app_name 0x7f050000
 int xml accessory_filter 0x7f040000
+int xml device_filter 0x7f040001
